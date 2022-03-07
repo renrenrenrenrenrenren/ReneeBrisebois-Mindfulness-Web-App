@@ -1,0 +1,98 @@
+/*classes to show and hide elements */
+.hide {
+    display: none !important;
+}
+
+.see {
+    display: initial;
+}
+
+/* main content */
+html {
+    background: #969696;
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+body {
+    background: #EAEAEA;
+    display: flex;
+    flex-wrap: wrap;
+    width: 626px;
+    height: 1239px;
+    justify-content: center;
+}
+
+header{
+    height: 148px;
+    width: 100%;
+    background: white;
+    text-align: center;
+}
+
+#top {
+    color: #747474;
+    font-family: monospace;
+    font-size: 300%;
+}
+
+#games, #puzzle {
+    height: 80%;
+}
+
+#games {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-content: center;
+}
+
+#games > div {
+    width: 270px;
+    height: 270px;
+    background: #C4C4C4;
+    display: inline-block;
+    margin-top: 30px;
+    border-radius: 20%;
+    text-align: center;
+}
+
+#games > div > button {
+    width: 100%;
+    height: 30%;
+    margin-top: 70%;
+    border: none;
+    background: white;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 150%;
+    color: #747474;
+}
+
+#puzzle {
+    width: 95%;
+    text-align: center;
+}
+
+#puzzleSpace {
+    width: 100%;
+    height: 400px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#puzzleSpace > img {
+    width: 100%;
+    object-fit: contain;
+}
+
+.puzzlePiece {
+    height: 100px;
+    width: 150px;
+    background: url("../images/stockSnap_6K9RMTD3B3.jpg");
+    background-size: 750px 500px;
+}

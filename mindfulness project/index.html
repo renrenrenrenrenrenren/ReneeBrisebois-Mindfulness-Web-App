@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="./css/styles.css" rel="stylesheet">
+        <title>Games</title>
+    </head>
+    <body>
+        <header>
+            <h1 id="top">Puzzles and Games</h1>
+        </header>
+
+        <!-- main menu -->
+        <div id="games">
+            <div>
+                <button onclick="playGame('puzzle', 'Jigsaw Puzzle')">Puzzle</button>
+            </div>
+            <div>
+                <button onclick="playGame('sudoku', 'Sudoku')">Sudoku</button>
+            </div>
+            <div>
+                <button onclick="playGame('clicker', 'Pet Clicker')">Pet Clicker</button>
+            </div>
+            <div>
+                <button onclick="playGame('crossword', 'Crossword')">Crossword</button>
+            </div>
+        </div>
+
+        <!-- game divs -->
+        <div id='puzzle' class="hide">
+            <button onclick="goBack('puzzle')">Back</button>
+            <button onclick="startPuzzle()">Start</button>
+            <div id="puzzleSpace">
+                <img src="./images/stockSnap_6K9RMTD3B3.jpg" id="fullImage"/>
+            </div>
+        </div>
+
+        <div id='sudoku' class="hide">
+            <button onclick="goBack('sudoku')">Back</button>
+        </div>
+
+        <div id='clicker' class="hide">
+            <button onclick="goBack('clicker')">Back</button>
+        </div>
+
+        <div id='crossword' class="hide">
+            <button onclick="goBack('crossword')">Back</button>
+        </div>
+
+        <!-- javascript link -->
+        <script type="text/javascript" src="./js/main.js"></script>
+    </body>
+    
+</html>
