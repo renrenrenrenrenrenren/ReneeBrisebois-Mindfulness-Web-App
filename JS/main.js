@@ -2,8 +2,8 @@
 
 //variable - - - - - - - - - - - - - - - - - -
 const board = document.getElementById("puzzleSpace");
-const boardHeight = 400;
-const boardWidth = 600;
+const boardHeight = 200;
+const boardWidth = 300;
 const puzzleImage = document.getElementById("fullImage");
 let puzzleArray = [[], [], [], []];
 // - - - - - - - - - - - - - - - - - - - - - - 
@@ -54,13 +54,28 @@ let puzzleArray = [[], [], [], []];
         }
     }
 
+    function makeSlot(id = false, num1, num2) {
+        let pieceSlot = document.createElement("div");
+        pieceSlot.setAttribute("class", "puzzleSlot");
+        dropSpace.appendChild(pieceSlot);
+        if (id) {
+            pieceSlot.setAttribute("id", `a${num1}${num2}`);
+        }
+    }
+
     function makeSpace() {
         let dropSpace = document.createElement("div");
         dropSpace.setAttribute("id", "dropSpace");
-        dropSpace.style.height = "400px";
-        dropSpace.style.width = "600px";
-        dropSpace.style.border = "3px solid black";
         board.appendChild(dropSpace);
+        let o = 0
+        while (o < 4) {
+            let j = 0
+            while (j < 4) {
+                makeSlot(true, o, j);
+                j++
+            }
+            o++
+        }
     }
 
     function makePuzzle() {
@@ -79,32 +94,53 @@ let puzzleArray = [[], [], [], []];
 
                                                                 currentPiece.style.position = "absolute";
                                                                 currentPiece.style.zIndex = 1000;
-                                                                                         
-                                                                moveAt(event.pageX, event.pageY);
 
                                                                 function moveAt(pageX, pageY) {
                                                                     currentPiece.style.left = pageX - shiftX + 'px';
                                                                     currentPiece.style.top = pageY - shiftY + 'px';
                                                                 }
+
+                                                                moveAt(event.pageX, event.pageY);
+
+                                                                function dropPiece(space) {
+                                                                    space.style.background = 'url("../images/stockSnap_6K9RMTD3B3.jpg")';
+                                                                    space.style.backgroundSize = "450px 312px";
+                                                                    space.style.backgroundPosition = currentPiece.style.backgroundPosition;
+
+                                                                    document.removeEventListener('mousemove', onMouseMove);
+                                                                    currentPiece.removeEventListener('mousedown', this);
+                                                                    currentPiece.onmouseup = null;
+                                                                    currentPiece.remove();
+                                                                }
                                                                                             
                                                                 function onMouseMove(event) {
                                                                     moveAt(event.pageX, event.pageY);
+
+                                                                    currentPiece.hidden = true;
+                                                                    let elemBelow = document.elementFromPoint(event.clientX, event.clientY);
+                                                                    currentPiece.hidden = false;
+
+                                                                    if (!elemBelow) return;
+                                                                    if (!elemBelow.hasAttribute("id")) return;
+                                                                    
+                                                                    let spaceId = elemBelow.getAttribute("id");
+                                                                    let pieceId = currentPiece.getAttribute("id");
+                                                                    let compareId = spaceId.slice(1);
+
+                                                                    if (pieceId === compareId) {
+                                                                        currentPiece.addEventListener('mouseup', dropPiece(elemBelow));
+                                                                    }
                                                                 }
                                                                                             
                                                                 document.addEventListener('mousemove', onMouseMove);
-                                                                                            
-                                                                currentPiece.onmouseup = function() {
-                                                                    document.removeEventListener('mousemove', onMouseMove);
-                                                                    currentPiece.onmouseup = null;
-                                                                }
                                                                 
                                                                 currentPiece.ondragstart = function() {
                                                                     return false;
                                                                 }
                                                             })) //drag and drop function
                 i++;
-            }
+            } //while i
             k++;
-        }
+        } //while k
     }
 // - - - - - - - - - - - - - - - - - - - - - -
