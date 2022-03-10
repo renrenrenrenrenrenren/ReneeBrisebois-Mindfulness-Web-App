@@ -5,7 +5,8 @@ const board = document.getElementById("puzzleSpace");
 const boardHeight = 200;
 const boardWidth = 300;
 const puzzleImage = document.getElementById("fullImage");
-let puzzleArray = [[], [], [], []];
+let puzzlePlaying = false;
+let puzzleEnded = false;
 // - - - - - - - - - - - - - - - - - - - - - - 
 
 //button functions - - - - - - - - - - - - - -
@@ -24,6 +25,8 @@ let puzzleArray = [[], [], [], []];
                 board.removeChild(board.firstChild);
             }
             board.appendChild(puzzleImage);
+            puzzlePlaying = false;
+            return puzzlePlaying;
         }
     }
 
@@ -79,68 +82,101 @@ let puzzleArray = [[], [], [], []];
     }
 
     function makePuzzle() {
-        makeSpace();
-        let k = 0;
-        while (k < 4) {
-            let i = 0;
-            while (i < 4) {
-                makePiece(true, k, i);
-                puzzleArray[k].push(i);
-                let currentPiece = document.getElementById(`${k}${i}`);
-                currentPiece.style.backgroundPosition = 25 * i + "% " + 25 * k + "%";
-                currentPiece.addEventListener("mousedown", (function(event) {
-                                                                let shiftX = event.clientX - currentPiece.getBoundingClientRect().left;
-                                                                let shiftY = event.clientY - currentPiece.getBoundingClientRect().top;
-
-                                                                currentPiece.style.position = "absolute";
-                                                                currentPiece.style.zIndex = 1000;
-
-                                                                function moveAt(pageX, pageY) {
-                                                                    currentPiece.style.left = pageX - shiftX + 'px';
-                                                                    currentPiece.style.top = pageY - shiftY + 'px';
-                                                                }
-
-                                                                moveAt(event.pageX, event.pageY);
-
-                                                                function dropPiece(space) {
-                                                                    space.style.background = 'url("../images/stockSnap_6K9RMTD3B3.jpg")';
-                                                                    space.style.backgroundSize = "450px 312px";
-                                                                    space.style.backgroundPosition = currentPiece.style.backgroundPosition;
-
-                                                                    document.removeEventListener('mousemove', onMouseMove);
-                                                                    currentPiece.removeEventListener('mousedown', this);
-                                                                    currentPiece.onmouseup = null;
-                                                                    currentPiece.remove();
-                                                                }
-                                                                                            
-                                                                function onMouseMove(event) {
-                                                                    moveAt(event.pageX, event.pageY);
-
-                                                                    currentPiece.hidden = true;
-                                                                    let elemBelow = document.elementFromPoint(event.clientX, event.clientY);
-                                                                    currentPiece.hidden = false;
-
-                                                                    if (!elemBelow) return;
-                                                                    if (!elemBelow.hasAttribute("id")) return;
-                                                                    
-                                                                    let spaceId = elemBelow.getAttribute("id");
-                                                                    let pieceId = currentPiece.getAttribute("id");
-                                                                    let compareId = spaceId.slice(1);
-
-                                                                    if (pieceId === compareId) {
-                                                                        currentPiece.addEventListener('mouseup', dropPiece(elemBelow));
+        if (puzzleEnded === true) {
+            while (board.hasChildNodes()) {
+                board.removeChild(board.firstChild);
+            }
+        }
+        if (puzzlePlaying === false) {
+            puzzlePlaying = true;
+            makeSpace();
+            let k = 0;
+            while (k < 4) {
+                let i = 0;
+                while (i < 4) {
+                    makePiece(true, k, i);
+                    let currentPiece = document.getElementById(`${k}${i}`);
+                    currentPiece.style.backgroundPosition = 25 * i + "% " + 25 * k + "%";
+                    currentPiece.addEventListener("mousedown", (function(event) {
+                                                                    let shiftX = event.clientX - currentPiece.getBoundingClientRect().left;
+                                                                    let shiftY = event.clientY - currentPiece.getBoundingClientRect().top;
+    
+                                                                    currentPiece.style.position = "absolute";
+                                                                    currentPiece.style.zIndex = 1000;
+    
+                                                                    function moveAt(pageX, pageY) {
+                                                                        currentPiece.style.left = pageX - shiftX + 'px';
+                                                                        currentPiece.style.top = pageY - shiftY + 'px';
                                                                     }
-                                                                }
-                                                                                            
-                                                                document.addEventListener('mousemove', onMouseMove);
-                                                                
-                                                                currentPiece.ondragstart = function() {
-                                                                    return false;
-                                                                }
-                                                            })) //drag and drop function
-                i++;
-            } //while i
-            k++;
-        } //while k
+    
+                                                                    moveAt(event.pageX, event.pageY);
+                                                                                                
+                                                                    function onMouseMove(event) {
+                                                                        moveAt(event.pageX, event.pageY);
+    
+                                                                        currentPiece.hidden = true;
+                                                                        let elemBelow = document.elementFromPoint(event.clientX, event.clientY);
+                                                                        currentPiece.hidden = false;
+    
+                                                                        if (!elemBelow) return;
+                                                                        if (!elemBelow.hasAttribute("id")) return;
+                                                                        
+                                                                        let spaceId = elemBelow.getAttribute("id");
+                                                                        let pieceId = currentPiece.getAttribute("id");
+                                                                        let compareId = spaceId.slice(1);
+    
+                                                                        function dropPiece(pc1, pc2, space) {
+                                                                            if (pc1 === pc2) {
+                                                                                space.style.background = 'url("../images/stockSnap_6K9RMTD3B3.jpg")';
+                                                                                space.style.backgroundSize = "450px 312px";
+                                                                                space.style.backgroundPosition = currentPiece.style.backgroundPosition;
+            
+                                                                                document.removeEventListener('mousemove', onMouseMove);
+                                                                                currentPiece.removeEventListener('mousedown', this);
+                                                                                currentPiece.onmouseup = null;
+                                                                                currentPiece.remove();
+                                                                            }
+                                                                        }
+    
+                                                                        currentPiece.onmouseup = function() {
+                                                                            document.removeEventListener('mousemove', onMouseMove);
+                                                                            dropPiece(pieceId, compareId, elemBelow);
+                                                                            currentPiece.onmouseup = null;
+                                                                        };
+    
+                                                                        //currentPiece.addEventListener('mouseup', dropPiece(pieceId, compareId, elemBelow));
+                                                                    }
+                                                                                                
+                                                                    document.addEventListener('mousemove', onMouseMove);
+                                                                    
+                                                                    currentPiece.ondragstart = function() {
+                                                                        return false;
+                                                                    }
+                                                                })) //drag and drop function
+                    i++;
+                } //while i
+                k++;
+            } //while k
+            let puzzleArray = document.getElementsByClassName("puzzlePiece");
+            puzzleArray = arrayShuffle(puzzleArray);
+            for (let t = 0; t < puzzleArray.length; t++) {
+                board.appendChild(puzzleArray[t]);
+            }
+            return puzzlePlaying;
+        } //if puzzle playing
+    }//makePuzzle function
+
+    function endPuzzle() {
+        const space = document.getElementById("dropSpace");
+        if (!space.nextElementSibling) {
+            while (space.hasChildNodes()) {
+                space.removeChild(space.firstChild);
+            }
+            space.style.background = 'url("../images/stockSnap_6K9RMTD3B3.jpg")';
+            space.style.backgroundSize = "450px 312px";
+            puzzlePlaying = false;
+            puzzleEnded = true;
+            return puzzlePlaying, puzzleEnded;
+        }
     }
 // - - - - - - - - - - - - - - - - - - - - - -
